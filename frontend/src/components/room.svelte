@@ -10,9 +10,9 @@
    * @property {method} socket - one of the method in the io for the connection
    */
   //  const socket = io.connect("*")
-  const socket = io.connect("http://10.124.21.248:5000/")
+  // const socket = io.connect("http://10.124.21.248:5000/")
   //  const socket = io.connect("http://192.168.34.108:5000/")
-  //  const socket = io.connect("http://192.168.34.136:5000/")
+   const socket = io.connect("http://192.168.34.136:5000/")
   let ipAddress = ""
   /**
    * @property {boolean} roomCreate - gives the boolean value

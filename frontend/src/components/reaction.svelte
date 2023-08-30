@@ -1,6 +1,8 @@
 <script>
   import { chain } from "../stores/chain"
   import { onMount, afterUpdate } from "svelte"
+  import { fly } from "svelte/transition"
+
   /**
    * @type {Number} row -  gives the rows of the Array
    */
@@ -221,7 +223,110 @@
   socket.on("winner", (state) => {
     winner = state
   })
-  // $: console.log("clickCell_update",$chain.click)
+
+  /**
+   * Check if a cell is a corner.
+   */
+  const isCorner = (row, col) => {
+    return (
+      (row === 0 && col === 0) || (row === 0 && col === 23) || (row === 15 && col === 0) || (row === 15 && col === 23)
+    )
+  }
+
+  /**
+   * Check if a cell is on a side (but not a corner).
+   */
+  const isSide = (row, col) => {
+    return (row === 0 || row === 15 || col === 0 || col === 23) && !isCorner(row, col)
+  }
+
+  /**
+   * Check if a cell is at the center of the grid.
+   * Excluding sides and corners.
+   */
+  const isCenter = (row, col) => {
+    return row > 0 && row < 15 && col > 0 && col < 23
+  }
+
+  /**
+   * Get the appropriate animation class based on sphere's position.
+   */
+  // const getAnimationClass = (row, col) => {
+  //   if (isCorner(row, col)) {
+  //     return "animate-spin-corner"
+  //   } else if (isSide(row, col)) {
+  //     return "animate-spin-side"
+  //   } else if (isCenter(row, col)) {
+  //     return "animate-spin-center"
+  //   } else {
+  //     return "" // No animation class for other positions
+  //   }
+  // }
+  /**
+   * Get the appropriate animation class based on sphere's position.
+   */
+  const getAnimationClass = (row, col) => {
+    if (isCorner(row, col)) {
+      return "animate-spin" // Apply animation class to corners
+    } else if (isTwoInBoxOnSide(row, col)) {
+      return "animate-spin-side" // Apply animation class when two spheres are in a box on sides
+    } else if (isThreeInBox(row, col)) {
+      return "animate-spin" // Apply animation class when three spheres are in a box
+    } else {
+      return "" // No animation class for other positions
+    }
+  }
+  // Helper function to check if two spheres are in a box on sides (excluding corners)
+  const isTwoInBoxOnSide = (row, col) => {
+    // Check if the cell is on the sides but not a corner
+    if (isSide(row, col) && !isCorner(row, col)) {
+      const neighbors = [
+        [row - 1, col],
+        [row + 1, col],
+        [row, col - 1],
+        [row, col + 1],
+      ]
+
+      let sphereCount = 0
+      for (const [nRow, nCol] of neighbors) {
+        if (isValidCell(nRow, nCol) && cells[nRow][nCol] > 0) {
+          sphereCount++
+        }
+      }
+
+      return sphereCount === 2 // Apply animation class if two spheres are present
+    }
+
+    return false
+  }
+
+  // Helper function to check if three spheres are in a box
+  const isThreeInBox = (row, col) => {
+    // Check if the cell is not on corners or sides
+    if (!isCorner(row, col) && !isSide(row, col)) {
+      // Check for the presence of three spheres in the box
+      if (row > 0 && row < 15 && col > 0 && col < 23) {
+        // Check the positions of neighboring cells
+        const neighbors = [
+          [row - 1, col],
+          [row + 1, col],
+          [row, col - 1],
+          [row, col + 1],
+        ]
+
+        let sphereCount = 0
+        for (const [nRow, nCol] of neighbors) {
+          if (isValidCell(nRow, nCol) && cells[nRow][nCol] > 0) {
+            sphereCount++
+          }
+        }
+
+        return sphereCount === 3 // Apply animation class if three spheres are present
+      }
+    }
+
+    return false
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -230,7 +335,7 @@
   style="border-color: {$chain.currentPlayer};"
   on:click={() => clickCell(row, col)}
 >
-  <div class="flex h-6 w-6 items-center justify-center">
+  <!-- <div class="flex h-6 w-6 items-center justify-center">
     {#if cells[row][col] > 0 && cells[row][col] <= 4}
       {#each Array(cells[row][col]) as _, index}
         <div
@@ -239,5 +344,87 @@
         />
       {/each}
     {/if}
+  </div> -->
+
+  <!-- <div class="flex h-6 w-6 items-center justify-center">
+    {#if cells[row][col] > 0 && cells[row][col] <= 4}
+      {#each Array(cells[row][col]) as _, index}
+        {#if cells[row][col] === 1 && (isCorner(row, col) || isCenter(row, col))}
+          <div
+            in:fly={{ delay: 10 * index }}
+            class="flex h-[10px] w-[15px] animate-spin items-center justify-center rounded-full"
+            style="background-color:  {$chain.actualArr[row][col]}; "
+          />
+        {:else if cells[row][col] === 2 && isSide(row, col)}
+          <div
+            in:fly={{ x: 30 * (index === 0 ? -1 : 1), delay: 10 * index }}
+            class="flex h-[10px] w-[15px] animate-spin items-center justify-center rounded-full"
+            style="background-color:  {$chain.actualArr[row][col]}; "
+          />
+        {:else if cells[row][col] === 3}
+          <div
+            in:fly={{ x: 30 * (index - 1), delay: 10 * index }}
+            class="flex h-[10px] w-[15px] animate-spin items-center justify-center rounded-full"
+            style="background-color:  {$chain.actualArr[row][col]}; "
+          />
+        {:else}
+          <div
+            class="flex h-[10px] w-[15px] animate-spin items-center justify-center rounded-full"
+            style="background-color:  {$chain.actualArr[row][col]}; "
+          />
+        {/if}
+      {/each}
+    {/if}
+  </div> -->
+  <div class="flex h-6 w-6 items-center justify-center">
+    {#if cells[row][col] > 0 && cells[row][col] <= 4}
+      {#each Array(cells[row][col]) as _, index}
+        <div
+          class={"flex h-[10px] w-[15px] items-center justify-center rounded-full " + getAnimationClass(row, col)}
+          style="background-color: {$chain.actualArr[row][col]};"
+        />
+      {/each}
+    {/if}
   </div>
 </div>
+
+<style>
+  .animate-spin-corner {
+    animation: spin-corner 1s linear infinite;
+  }
+
+  .animate-spin-side {
+    animation: spin-side 1s linear infinite;
+  }
+
+  .animate-spin-center {
+    animation: spin-center 1s linear infinite;
+  }
+
+  @keyframes spin-corner {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-side {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-center {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

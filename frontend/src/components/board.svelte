@@ -8,8 +8,8 @@
   // Establish a connection with the Socket.IO server
   // const socket = io.connect("*");
   // const socket = io.connect("http://192.168.34.108:5000/")
-  const socket = io.connect("http://10.124.21.248:5000/")
-  // const socket = io.connect("http://192.168.34.136:5000/")
+  // const socket = io.connect("http://10.124.21.248:5000/")
+  const socket = io.connect("http://192.168.34.136:5000/")
 
   //  const socket = io.connect(`http://${$chain.ip}:5000/`)
 
@@ -119,7 +119,7 @@
     </div>
     <!-- <h4 class:hidden={!displayTimeError} class="text-center w-full p-2 text-red-600 text-sm font-bold">{displayTimeError}</h4> -->
     <div class="h-[80%] w-[70%] bg-transparent">
-      <div class=" col-span-1 grid h-full w-full grid-cols-16 gap-1 p-1">
+      <div class=" grid-cols-16 col-span-1 grid h-full w-full gap-1 p-1">
         {#each boards as boardrow, row}
           {#each boardrow as boardcol, col}
             <Reaction {socket} {row} {col} />
