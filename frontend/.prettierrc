@@ -1,0 +1,11 @@
+{
+  "semi": false,
+  "htmlWhitespaceSensitivity": "ignore",
+  "printWidth": 120,
+  "tabWidth": 2,
+  "plugins": [
+    "prettier-plugin-svelte",
+    "prettier-plugin-tailwindcss"
+  ],
+  "pluginSearchDirs": false
+}
