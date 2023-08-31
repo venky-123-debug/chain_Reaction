@@ -108,7 +108,7 @@
 <WinningModal on:click={restartGame} />
 
 {#if $chain.gameEnd}
-  <div class="relative flex h-full w-full flex-col items-center justify-center bg-white/90">
+  <div class="relative flex h-full w-full flex-col items-center justify-center bg-gray-500/40">
     <div class="mb-3 flex w-[70%] items-center justify-between">
       <p class="text-base font-semibold" style="color:{$chain.currentPlayer};">
         Player {$chain.colors.indexOf($chain.currentPlayer) + 1} turn
@@ -119,7 +119,7 @@
     </div>
     <!-- <h4 class:hidden={!displayTimeError} class="text-center w-full p-2 text-red-600 text-sm font-bold">{displayTimeError}</h4> -->
     <div class="h-[80%] w-[70%] bg-transparent">
-      <div class=" col-span-1 grid h-full w-full grid-cols-16 gap-1 p-1">
+      <div class=" grid-cols-16 col-span-1 grid h-full w-full gap-1 p-1">
         {#each boards as boardrow, row}
           {#each boardrow as boardcol, col}
             <Reaction {socket} {row} {col} />

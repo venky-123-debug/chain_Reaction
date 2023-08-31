@@ -43,8 +43,8 @@ export const chain = writable({
   currentPlayer: undefined,
   winningModal: false,
   timer: 20,
-  timerMsg: undefined
-});
+  timerMsg: undefined,
+})
 
 /**
  * Calculate the Euclidean color difference between two color codes.
@@ -54,11 +54,11 @@ export const chain = writable({
  * @returns {number} The Euclidean color difference between the two colors.
  */
 const calculateColorDifference = (color1, color2) => {
-  const r = (parseInt(color1.substring(1, 3), 16) - parseInt(color2.substring(1, 3), 16)) ** 2;
-  const g = (parseInt(color1.substring(3, 5), 16) - parseInt(color2.substring(3, 5), 16)) ** 2;
-  const b = (parseInt(color1.substring(5, 7), 16) - parseInt(color2.substring(5, 7), 16)) ** 2;
-  return Math.sqrt(r + g + b);
-};
+  const r = (parseInt(color1.substring(1, 3), 16) - parseInt(color2.substring(1, 3), 16)) ** 2
+  const g = (parseInt(color1.substring(3, 5), 16) - parseInt(color2.substring(3, 5), 16)) ** 2
+  const b = (parseInt(color1.substring(5, 7), 16) - parseInt(color2.substring(5, 7), 16)) ** 2
+  return Math.sqrt(r + g + b)
+}
 
 /**
  * Generate an array of random dark color codes.
@@ -66,21 +66,17 @@ const calculateColorDifference = (color1, color2) => {
  * @param {number} numColors - The number of random dark color codes to generate.
  * @returns {string[]} An array of unique random dark color codes.
  */
-// The value 8355711 corresponds to the hexadecimal color code #7F7F7F, which represents a mid-gray color. 
+// The value 8355711 corresponds to the hexadecimal color code #7F7F7F, which represents a mid-gray color.
 export const generateRandomColorCodes = (numColors) => {
-  const colorCodes = [];
+  const colorCodes = []
 
   while (colorCodes.length < numColors) {
-    const randomColor = '#' + Math.floor(Math.random() * 8355711).toString(16); // Generating dark colors with brightness < 50%
-    if (!colorCodes.some(color => calculateColorDifference(randomColor, color) < 100)) {
-      colorCodes.push(randomColor);
+    const randomColor = "#" + Math.floor(Math.random() * 8355711).toString(16) // Generating dark colors with brightness < 50%
+    if (!colorCodes.some((color) => calculateColorDifference(randomColor, color) < 500)) {
+      colorCodes.push(randomColor)
     }
   }
 
-  chain.update(chainState => ({ ...chainState, colors: colorCodes }));
-  return colorCodes;
-};
-
-
-
-
+  chain.update((chainState) => ({ ...chainState, colors: colorCodes }))
+  return colorCodes
+}

@@ -27,11 +27,8 @@
           class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:w-full sm:max-w-sm sm:p-6"
         >
           <div>
-            <div
-              class="mx-auto flex h-12 w-12 items-center justify-center rounded-full"
-              style="background-color:{$chain.winner}"
-            >
-              <i class="fa-solid fa-user" />
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#f7f7f7]">
+              <i class="fa-solid fa-user" style="color:{$chain.winner}" />
             </div>
             <div class="mt-3 text-center sm:mt-5">
               <h3
@@ -46,13 +43,14 @@
               </div>
             </div>
           </div>
-          <div class="mt-5 sm:mt-6">
+          <div class="mt-5 flex items-center justify-center sm:mt-6">
             <button
               type="button"
               on:click
-              class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              class="inline-flex w-1/2 items-center justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
             >
-              Restart Game
+              <i class="fa-solid fa-arrow-rotate-right" />
+              &nbsp;Restart Game
             </button>
           </div>
         </div>
