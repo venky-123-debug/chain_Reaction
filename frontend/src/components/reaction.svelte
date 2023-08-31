@@ -267,11 +267,11 @@
    */
   const getAnimationClass = (row, col) => {
     if (isCorner(row, col)) {
-      return "animate-spin" // Apply animation class to corners
+      return "animate-spin-corner" // Apply animation class to corners
     } else if (isTwoInBoxOnSide(row, col)) {
       return "animate-spin-side" // Apply animation class when two spheres are in a box on sides
     } else if (isThreeInBox(row, col)) {
-      return "animate-spin" // Apply animation class when three spheres are in a box
+      return "animate-spin-center" // Apply animation class when three spheres are in a box
     } else {
       return "" // No animation class for other positions
     }
